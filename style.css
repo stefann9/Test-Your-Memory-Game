@@ -1,0 +1,23 @@
+html{
+    box-sizing: border-box;
+}
+*,*::after,*::before{
+    box-sizing: inherit;
+}
+
+body{
+    /* width: 90%; */
+    margin:0 auto;
+    
+    background-color: rgb(255, 255, 255);
+}
+
+
+.container{
+    position: relative;
+    width: 60%;
+    height: 50vh;
+  
+    margin:20vh auto;
+    background-color: aliceblue;
+}
