@@ -35,3 +35,8 @@ body{
     line-height: 1.5;
     text-align: center;
 }
+
+.hideNum{
+    background-color: black;
+    color: black;
+}

@@ -106,12 +106,21 @@ function genRandNum(tCount) {
         listOfDivs.push(div1)
         container.append(div1)
     }
+    setTimeout(()=>{
+        listOfDivs.forEach((x)=>{
+            x.classList.add('hideNum')
+        })
+        container.addEventListener('mouseup', startChoosing)
+    },3000)
+
+    
 }
 
 let choice = NaN
 let listOfChoices = [-1]
-container.addEventListener('mouseup', (e) => {
-    // console.log(e.target.classList)
+let score = 0;
+
+const startChoosing = function(e){
     if (e.target.classList[0] === 'randNum') {
         choice = parseInt(e.target.innerText)
         console.log(choice)
@@ -121,13 +130,12 @@ container.addEventListener('mouseup', (e) => {
 
             listOfChoices.push(choice)
             console.log(listOfDivs[choice])
-            // container.removeChild(listOfDivs[choice])
             listOfDivs[choice].remove()
-            // listOfDivs.pop()
             if(listOfDivs.length === listOfChoices.length - 1){
                 listOfChoices = [-1]
                 listOfDivs = []
                 tCount++
+                score++
                 genRandNum(tCount)
             }
             
@@ -136,8 +144,11 @@ container.addEventListener('mouseup', (e) => {
             listOfChoices = [-1]
             listOfDivs = []
             tCount = 5
+            score = 0
         }
 
     }
 
-})
+}
+
+
