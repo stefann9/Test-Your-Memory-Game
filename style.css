@@ -39,4 +39,9 @@ body{
 .hideNum{
     background-color: black;
     color: black;
+
 }
+/* .hideNum::selection{
+    background-color: black;
+    color: black;
+} */
