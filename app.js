@@ -83,13 +83,24 @@ let score = 0;
 // spaces available on col
 let spacesOnCol = [];
 let spacesOnRow = [];
+const title = document.querySelector('h1')
+const scoreDisplay = document.createElement('p');
 
 
+
+function appendScore(score,adjSibling){
+    scoreDisplay.innerText = `Your score is: ${score}`
+    scoreDisplay.classList.add('scoreClass')
+    adjSibling.insertAdjacentElement('afterend',scoreDisplay);
+    // return scoreDisplay
+}
 
 
 const startGame = () => {
     clearTimeout(timeToChooseId) 
     resetGameVar(numCount,score);
+
+    title.innerHTML = `Lv. ${score}`
 
 
     maxNumCount = maxOfNumsInContainer(numSize,container.offsetWidth,container.offsetHeight)
@@ -127,6 +138,7 @@ const startGame = () => {
         })
         .then(()=>{
             resetGameVar();
+            startGameBtn.removeAttribute('disabled')
             startGameBtn.addEventListener('click',newGame)
         })
 }
@@ -136,7 +148,9 @@ function newGame(){
     numCount = 2
     score = 0
     startGame()
-    // remove e after newGame
+
+    //disabled btn and remove e after newGame
+    startGameBtn.setAttribute('disabled', "");
     startGameBtn.removeEventListener('click', newGame)
 }
 
@@ -156,6 +170,11 @@ function resetGameVar(currentCount,currentScore) {
     choice = NaN
     listOfChoices = [-1]
     score = currentScore
+
+    timeBar.style.transition= ``
+    timeBar.classList.remove('timeBarShrink')
+
+    scoreDisplay.remove()
 }
 
 
@@ -206,17 +225,22 @@ const startChoosing = function (e) {
                 // numCount = 109
                 score++
                 // console.log(maxNumCount)
-                timeBar.style.transition= ``
-                timeBar.classList.remove('timeBarShrink')
+                // timeBar.style.transition= ``
+                // timeBar.classList.remove('timeBarShrink')
 
                 startGame()
             }
         } else {
             // lose:
-            timeBar.style.transition= ``
-            timeBar.classList.remove('timeBarShrink')
-
+           
+            
             resetGameVar(numCount,score)
+
+            
+            title.innerHTML = `End of Game`
+            appendScore(score,title)
+
+            startGameBtn.removeAttribute('disabled')
             startGameBtn.addEventListener('click', newGame)
         }
 
