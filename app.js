@@ -59,6 +59,12 @@ let numSize = 38;
 // how many num to gen
 let numCount = 2;
 
+function maxOfNumsInContainer(numSize,containerWidth,containerHeight){
+    let numCol = Math.floor(containerHeight/ numSize);
+    let numRow = Math.floor(containerWidth / numSize);
+    return numCol * numRow;
+}
+let maxNumCount = maxOfNumsInContainer(numSize,container.offsetWidth,container.offsetHeight)
 
 // list of num in .container
 let listOfNum = []
@@ -79,6 +85,17 @@ const startGame = () => {
     clearTimeout(timeToChooseId) 
     resetGameVar(numCount,score);
 
+
+    maxNumCount = maxOfNumsInContainer(numSize,container.offsetWidth,container.offsetHeight)
+    // console.log(maxNumCount)
+    // console.log(numCount)
+    // numCount === maxNumCount > true : console.log('f')
+    if(maxNumCount < numCount){
+        console.log('win')
+        numCount = 2
+        startGameBtn.addEventListener('click', newGame)
+        return 'EndGame'
+    }
     // save spaces available on row/col
     // [spacesOnRow, spacesOnCol] = spacesInContainer(numSize)
     spacesOnRow = spacesInContainer(numSize,spacesOnRow,container.offsetWidth)
@@ -175,8 +192,9 @@ const startChoosing = function (e) {
             if (listOfNum.length === listOfChoices.length - 1) {
             //win: 
                 numCount++
+                // numCount = 109
                 score++
-
+                console.log(maxNumCount)
                 startGame()
             }
         } else {
