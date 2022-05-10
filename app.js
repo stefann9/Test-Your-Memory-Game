@@ -24,23 +24,22 @@ function arrayInRange(num) {
 function ascNums(num1, num2) {
     return num1 - 1 === num2
 }
-
+let timeOutHideNumId = NaN;
 const hideNum = function (delay) {
     return new Promise((resolve, refect) => {
-        setTimeout(() => {
-            listOfNum.forEach((x) => {
-                x.classList.add('hideNum')
-            })
+        timeOutHideNumId = setTimeout(() => {
             resolve();
         }, delay)
     })
 }
-
-// const timeForChoosing = function(delay){
-//     return new Promise((resolve,reject)=>{
-
-//     })
-// }
+let timeToChooseId = NaN
+const timeToChoose = function(delay){
+    return new Promise((resolve,reject)=>{
+        timeToChooseId = setTimeout(()=>{
+            resolve();
+        },delay)
+    })
+}
 
 // if spacesOnCol/Row.length < numCount then add more
 function addNewSpaces(spacesOnCol,spacesOnRow,numCount){
@@ -77,6 +76,7 @@ let spacesOnCol = [];
 let spacesOnRow = [];
 
 const startGame = () => {
+    clearTimeout(timeToChooseId) 
     resetGameVar(numCount,score);
     
     [spacesOnRow, spacesOnCol] = spacesOnContainer(numSize)
@@ -88,14 +88,22 @@ const startGame = () => {
 
     hideNum(3000)
         .then(() => {
+            listOfNum.forEach((x) => {
+                x.classList.add('hideNum')
+            })
             container.addEventListener('mouseup', startChoosing)
+            return timeToChoose(5000)
+        })
+        .then(()=>{
+            resetGameVar();
+            startGameBtn.addEventListener('click',newGame)
         })
 }
 
 function newGame(){
+    clearInterval(timeOutHideNumId)
     numCount = 2
     score = 0
-
     startGame()
     // remove e after newGame
     startGameBtn.removeEventListener('click', newGame)
