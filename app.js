@@ -131,13 +131,20 @@ const startGame = () => {
             })
             container.addEventListener('mouseup', startChoosing)
 
-            timeBar.style.transition= `width ${timeToChooseDelay/1000}s ease-in`
+            timeBar.style.transition= `width ${timeToChooseDelay/1000}s ease-in, background-color ${timeToChooseDelay/1000}s ease-in`
             timeBar.classList.add('timeBarShrink')
 
             return timeToChoose(timeToChooseDelay)
         })
         .then(()=>{
-            resetGameVar();
+
+            
+
+            resetGameVar(numCount,score);
+            
+            title.innerHTML = `End of Game`;
+            appendScore(score,title)
+
             startGameBtn.removeAttribute('disabled')
             startGameBtn.addEventListener('click',newGame)
         })
@@ -145,6 +152,7 @@ const startGame = () => {
 
 function newGame(){
     clearInterval(timeOutHideNumId)
+    clearInterval(timeToChooseId)
     numCount = 2
     score = 0
     startGame()
@@ -242,6 +250,8 @@ const startChoosing = function (e) {
 
             startGameBtn.removeAttribute('disabled')
             startGameBtn.addEventListener('click', newGame)
+
+            clearInterval(timeToChooseId)
         }
 
     }
