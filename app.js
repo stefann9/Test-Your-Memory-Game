@@ -78,8 +78,11 @@ let spacesOnRow = [];
 const startGame = () => {
     clearTimeout(timeToChooseId) 
     resetGameVar(numCount,score);
-    
-    [spacesOnRow, spacesOnCol] = spacesOnContainer(numSize)
+
+    // save spaces available on row/col
+    // [spacesOnRow, spacesOnCol] = spacesInContainer(numSize)
+    spacesOnRow = spacesInContainer(numSize,spacesOnRow,container.offsetWidth)
+    spacesOnCol = spacesInContainer(numSize,spacesOnCol,container.offsetHeight)
 
     // avoid typig nums before hideNum
     container.removeEventListener('mouseup', startChoosing)
@@ -118,8 +121,9 @@ function resetGameVar(currentCount,currentScore) {
 
     listOfNum = []
     listOfPositions = []
-
-    [spacesOnRow, spacesOnCol] = [[], []]
+    spacesOnCol = [];
+    spacesOnRow = [];
+    
 
     choice = NaN
     listOfChoices = [-1]
@@ -128,21 +132,31 @@ function resetGameVar(currentCount,currentScore) {
 
 
 
-function spacesOnContainer(numSize) {
-    // save and return available spaces in .container
-    let numRow = Math.floor(container.offsetWidth / numSize);
-    let numCol = Math.floor(container.offsetHeight / numSize);
+// function spacesInContainer(numSize) {
+//     // save and return available spaces in .container
+//     let numRow = Math.floor(container.offsetWidth / numSize);
+//     let numCol = Math.floor(container.offsetHeight / numSize);
 
-    spacesOnRow.push(...arrayInRange(numRow))
-    spacesOnCol.push(...arrayInRange(numCol))
+//     spacesOnRow.push(...arrayInRange(numRow))
+//     spacesOnCol.push(...arrayInRange(numCol))
 
-    shuffle(spacesOnRow)
-    shuffle(spacesOnCol)
+//     shuffle(spacesOnRow)
+//     shuffle(spacesOnCol)
 
-    return [spacesOnRow, spacesOnCol]
+//     return [spacesOnRow, spacesOnCol]
+// }
+
+function spacesInContainer(numSize,spacesColOrRow,heightOrWidth) {
+    // save and return available spaces in .container on row/height
+    // func arg: numSize with (spacesOnRow and container.width) or (spacesOnCol and container.height)
+    let numColOrRow = Math.floor(heightOrWidth/ numSize);
+    
+    spacesColOrRow.push(...arrayInRange(numColOrRow))
+    
+    shuffle(spacesColOrRow)
+
+    return spacesColOrRow
 }
-
-
 
 const startChoosing = function (e) {
 
@@ -230,25 +244,7 @@ function genRandNum(numCount) {
 
 
 
-// function spacesOnContainer(numSize,spacesColOrRow,) {
-//     // reset game var
-    
 
-//     // impartim containerul in spati disponibile pe rand si coloane pentru 
-//     // grosimea si inaltimea numerelor
-//     let numColOrRow = Math.floor(container.offsetWidth / numSize);
-//     // let numCol = Math.floor(container.offsetHeight / numSize);
-//     // let spacesOnRow = [];
-//     // let spacesOnCol = [];
-//     // salveaza numerele disponibile pe rand/col
-//     spacesColOrRow.push(...arrayInRange(numColOrRow))
-//     // spacesOnCol.push(...arrayInRange(numCol))
-//     //amesteca spatiile disponibile
-//     shuffle(spacesColOrRow)
-//     // shuffle(spacesOnCol)
-
-//     return spacesColOrRow
-// }
 
 
 
