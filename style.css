@@ -18,7 +18,7 @@ body{
     width: 60%;
     height: 50vh;
   
-    margin:20vh auto;
+    margin:0 auto;
     background-color: aliceblue;
 }
 
@@ -44,4 +44,16 @@ body{
 .hideNum::selection{
     /* background-color: black; */
     color: black;
+}
+
+.timeBar{
+    width: 60%;
+    height: 10px;
+    background-color: blue;
+    margin:0 auto;
+    /* transition: width 3s ease-in; */
+}
+
+.timeBarShrink{
+    width: 0px
 }

@@ -1,5 +1,6 @@
 const container = document.querySelector('.container');
 const startGameBtn = document.querySelector('button');
+const timeBar = document.querySelector('.timeBar')
 
 
 function shuffle(array) {
@@ -33,6 +34,7 @@ const hideNum = function (delay) {
     })
 }
 let timeToChooseId = NaN
+let timeToChooseDelay = 5000;
 const timeToChoose = function(delay){
     return new Promise((resolve,reject)=>{
         timeToChooseId = setTimeout(()=>{
@@ -54,16 +56,17 @@ function addNewSpaces(spacesOnCol,spacesOnRow,numCount){
     }
 }
 
+function maxOfNumsInContainer(numSize,containerWidth,containerHeight){
+    // number of nums that can fit in container
+    let numCol = Math.floor(containerHeight/ numSize);
+    let numRow = Math.floor(containerWidth / numSize);
+    return numCol * numRow;
+}
 // max space occupied by num
 let numSize = 38;
 // how many num to gen
 let numCount = 2;
 
-function maxOfNumsInContainer(numSize,containerWidth,containerHeight){
-    let numCol = Math.floor(containerHeight/ numSize);
-    let numRow = Math.floor(containerWidth / numSize);
-    return numCol * numRow;
-}
 let maxNumCount = maxOfNumsInContainer(numSize,container.offsetWidth,container.offsetHeight)
 
 // list of num in .container
@@ -81,6 +84,9 @@ let score = 0;
 let spacesOnCol = [];
 let spacesOnRow = [];
 
+
+
+
 const startGame = () => {
     clearTimeout(timeToChooseId) 
     resetGameVar(numCount,score);
@@ -90,6 +96,7 @@ const startGame = () => {
     // console.log(maxNumCount)
     // console.log(numCount)
     // numCount === maxNumCount > true : console.log('f')
+    // check if max number of nums reach
     if(maxNumCount < numCount){
         console.log('win')
         numCount = 2
@@ -112,7 +119,11 @@ const startGame = () => {
                 x.classList.add('hideNum')
             })
             container.addEventListener('mouseup', startChoosing)
-            return timeToChoose(5000)
+
+            timeBar.style.transition= `width ${timeToChooseDelay/1000}s ease-in`
+            timeBar.classList.add('timeBarShrink')
+
+            return timeToChoose(timeToChooseDelay)
         })
         .then(()=>{
             resetGameVar();
@@ -194,11 +205,17 @@ const startChoosing = function (e) {
                 numCount++
                 // numCount = 109
                 score++
-                console.log(maxNumCount)
+                // console.log(maxNumCount)
+                timeBar.style.transition= ``
+                timeBar.classList.remove('timeBarShrink')
+
                 startGame()
             }
         } else {
             // lose:
+            timeBar.style.transition= ``
+            timeBar.classList.remove('timeBarShrink')
+
             resetGameVar(numCount,score)
             startGameBtn.addEventListener('click', newGame)
         }
