@@ -3,6 +3,25 @@ const startGameBtn = document.querySelector('button');
 const timeBar = document.querySelector('.timeBar')
 
 
+let timeOutHideNumId = NaN;
+const hideNum = function (delay) {
+    return new Promise((resolve, refect) => {
+        timeOutHideNumId = setTimeout(() => {
+            resolve();
+        }, delay)
+    })
+}
+let timeToChooseId = NaN
+let timeToChooseDelay = 5000;
+const timeToChoose = function(delay){
+    return new Promise((resolve,reject)=>{
+        timeToChooseId = setTimeout(()=>{
+            resolve();
+        },delay)
+    })
+}
+
+
 function shuffle(array) {
     array.sort(function () {
         return Math.random() - .5;
@@ -25,23 +44,7 @@ function arrayInRange(num) {
 function ascNums(num1, num2) {
     return num1 - 1 === num2
 }
-let timeOutHideNumId = NaN;
-const hideNum = function (delay) {
-    return new Promise((resolve, refect) => {
-        timeOutHideNumId = setTimeout(() => {
-            resolve();
-        }, delay)
-    })
-}
-let timeToChooseId = NaN
-let timeToChooseDelay = 5000;
-const timeToChoose = function(delay){
-    return new Promise((resolve,reject)=>{
-        timeToChooseId = setTimeout(()=>{
-            resolve();
-        },delay)
-    })
-}
+
 
 // if spacesOnCol/Row.length < numCount then add more
 function addNewSpaces(spacesOnCol,spacesOnRow,numCount){
@@ -62,6 +65,75 @@ function maxOfNumsInContainer(numSize,containerWidth,containerHeight){
     let numRow = Math.floor(containerWidth / numSize);
     return numCol * numRow;
 }
+
+function appendScore(score,adjSibling){
+    scoreDisplay.innerText = `Your score is: ${score}`
+    scoreDisplay.classList.add('scoreClass')
+    adjSibling.insertAdjacentElement('afterend',scoreDisplay);
+    // return scoreDisplay
+}
+
+function newGame(){
+    clearInterval(timeOutHideNumId)
+    clearInterval(timeToChooseId)
+
+    for(let e of container.children){
+        removeAfterTransition(e)
+    }
+
+    numCount = 2
+    score = 0
+    startGame()
+
+    //disabled btn and remove e after newGame
+    startGameBtn.setAttribute('disabled', "");
+    startGameBtn.removeEventListener('click', newGame)
+}
+
+
+function removeAfterTransition(element){
+    element.classList.add('removeNum')
+    element.addEventListener('transitionend',()=>{
+        element.remove();
+    })
+}
+
+function resetGameVar(currentCount,currentScore) {
+    // container.
+
+    
+
+
+    numCount = currentCount
+
+    listOfNum = []
+    listOfPositions = []
+    spacesOnCol = [];
+    spacesOnRow = [];
+    
+
+    choice = NaN
+    listOfChoices = [-1]
+    score = currentScore
+
+    timeBar.style.transition= ``
+    timeBar.classList.remove('timeBarShrink')
+
+    scoreDisplay.remove()
+}
+
+function spacesInContainer(numSize,spacesColOrRow,heightOrWidth) {
+    // save and return available spaces in .container on row/height
+    // func arg: numSize with (spacesOnRow and container.width) or (spacesOnCol and container.height)
+    let numColOrRow = Math.floor(heightOrWidth/ numSize);
+    
+    spacesColOrRow.push(...arrayInRange(numColOrRow))
+    
+    shuffle(spacesColOrRow)
+
+    return spacesColOrRow
+}
+
 // max space occupied by num
 let numSize = 38;
 // how many num to gen
@@ -88,12 +160,7 @@ const scoreDisplay = document.createElement('p');
 
 
 
-function appendScore(score,adjSibling){
-    scoreDisplay.innerText = `Your score is: ${score}`
-    scoreDisplay.classList.add('scoreClass')
-    adjSibling.insertAdjacentElement('afterend',scoreDisplay);
-    // return scoreDisplay
-}
+startGameBtn.addEventListener('click',newGame)
 
 
 const startGame = () => {
@@ -102,7 +169,7 @@ const startGame = () => {
 
     title.innerHTML = `Lv. ${score}`
 
-
+   
     maxNumCount = maxOfNumsInContainer(numSize,container.offsetWidth,container.offsetHeight)
     // console.log(maxNumCount)
     // console.log(numCount)
@@ -126,9 +193,11 @@ const startGame = () => {
 
     hideNum(3000)
         .then(() => {
+            
             listOfNum.forEach((x) => {
-                x.classList.add('hideNum')
-            })
+                    x.classList.add('hideNum')
+                })
+
             container.addEventListener('mouseup', startChoosing)
 
             timeBar.style.transition= `width ${timeToChooseDelay/1000}s ease-in, background-color ${timeToChooseDelay/1000}s ease-in`
@@ -138,8 +207,7 @@ const startGame = () => {
         })
         .then(()=>{
 
-            
-
+            revealNums(container.children)
             resetGameVar(numCount,score);
             
             title.innerHTML = `End of Game`;
@@ -150,68 +218,7 @@ const startGame = () => {
         })
 }
 
-function newGame(){
-    clearInterval(timeOutHideNumId)
-    clearInterval(timeToChooseId)
-    numCount = 2
-    score = 0
-    startGame()
 
-    //disabled btn and remove e after newGame
-    startGameBtn.setAttribute('disabled', "");
-    startGameBtn.removeEventListener('click', newGame)
-}
-
-startGameBtn.addEventListener('click',newGame)
-
-
-function resetGameVar(currentCount,currentScore) {
-    container.innerText = '';
-    numCount = currentCount
-
-    listOfNum = []
-    listOfPositions = []
-    spacesOnCol = [];
-    spacesOnRow = [];
-    
-
-    choice = NaN
-    listOfChoices = [-1]
-    score = currentScore
-
-    timeBar.style.transition= ``
-    timeBar.classList.remove('timeBarShrink')
-
-    scoreDisplay.remove()
-}
-
-
-
-// function spacesInContainer(numSize) {
-//     // save and return available spaces in .container
-//     let numRow = Math.floor(container.offsetWidth / numSize);
-//     let numCol = Math.floor(container.offsetHeight / numSize);
-
-//     spacesOnRow.push(...arrayInRange(numRow))
-//     spacesOnCol.push(...arrayInRange(numCol))
-
-//     shuffle(spacesOnRow)
-//     shuffle(spacesOnCol)
-
-//     return [spacesOnRow, spacesOnCol]
-// }
-
-function spacesInContainer(numSize,spacesColOrRow,heightOrWidth) {
-    // save and return available spaces in .container on row/height
-    // func arg: numSize with (spacesOnRow and container.width) or (spacesOnCol and container.height)
-    let numColOrRow = Math.floor(heightOrWidth/ numSize);
-    
-    spacesColOrRow.push(...arrayInRange(numColOrRow))
-    
-    shuffle(spacesColOrRow)
-
-    return spacesColOrRow
-}
 
 const startChoosing = function (e) {
 
@@ -224,24 +231,21 @@ const startChoosing = function (e) {
 
             listOfChoices.push(choice)
 
-            listOfNum[choice].remove()
+            
+            removeAfterTransition(listOfNum[choice])
 
             
             if (listOfNum.length === listOfChoices.length - 1) {
             //win: 
                 numCount++
-                // numCount = 109
                 score++
-                // console.log(maxNumCount)
-                // timeBar.style.transition= ``
-                // timeBar.classList.remove('timeBarShrink')
 
                 startGame()
             }
         } else {
             // lose:
            
-            
+            revealNums(container.children)
             resetGameVar(numCount,score)
 
             
@@ -305,6 +309,29 @@ function genRandNum(numCount) {
     }
 
 }
+
+
+
+
+function revealNums(container){
+    // container.children.forEach((x) => {
+    //     x.classList.add('hideNum')
+    // })
+    for(let x of container){
+        x.classList.remove('hideNum')
+        x.classList.add('revealNums')
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
