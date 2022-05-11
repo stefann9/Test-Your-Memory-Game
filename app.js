@@ -34,7 +34,8 @@ function newGame() {
 
     numCount = 2
     score = 0
-
+    hideNumDelay = 1000;
+    timeToChooseDelay = 3000;
     startGame()
 
     //disabled btn / remove eve after newGame
@@ -106,6 +107,8 @@ const startChoosing = function (e) {
                 //win: 
                 numCount++
                 score++
+                hideNumDelay+=250;
+                timeToChooseDelay+=500;
                 startGame()
             }
         } else {
@@ -120,7 +123,7 @@ const startChoosing = function (e) {
 ///////////////////////////////////////////////////////////
 // promises
 let hideNumId = NaN;
-let hideNumDelay = 2000;
+let hideNumDelay = 1000;
 function timeToChoose(timeToChoosedelay) {
     return new Promise((resolve, reject) => {
         timeToChooseId = setTimeout(() => {
