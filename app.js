@@ -91,9 +91,9 @@ function startGame() {
 }
 ///////////////////////////////////////////////////////////
 const startChoosing = function (e) {
-
-    if (e.target.classList[0] === 'randNum' && e.target.tagName === 'BUTTON') {
-
+    
+    if (e.target.classList[1] === 'hideNum' && e.target.tagName === 'BUTTON') {
+        
         choice = parseInt(e.target.innerText)
         prevChoice = listOfChoices[listOfChoices.length - 1]
 
@@ -275,6 +275,7 @@ function appendScore(score, adjSibling) {
 }
 ///////////////////////////////////////////////////////////
 function removeAfterTransition(element) {
+    element.classList.remove('hideNum')
     element.classList.add('removeNum')
     element.addEventListener('transitionend', () => {
         element.remove();

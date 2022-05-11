@@ -51,7 +51,7 @@ body {
     color: #03295e;
 }
 
-.hideNum::selection {
+.randNum::selection {
     color: #03295e00;
 }
 
