@@ -7,7 +7,7 @@ const scoreDisplay = document.createElement('p');
 
 // max space occupied by num
 let numSize = 38;
-// how many num to gen
+// how many nums to gen
 let numCount = 2;
 let maxNumCount = maxOfNumsInContainer(numSize, container.offsetWidth, container.offsetHeight)
 // spaces available on col
@@ -54,6 +54,7 @@ function startGame() {
 
     // update title
     title.innerHTML = `Lv. ${score}`
+    
     //update maxNumCount
     maxNumCount = maxOfNumsInContainer(numSize, container.offsetWidth, container.offsetHeight)
 
@@ -85,8 +86,8 @@ function startGame() {
             return timeToChoose(timeToChooseDelay)
         })
         .then(() => {
-            // if time to choose = over => end of game
-            endOfGame('End of Game')
+            // if time to choose = over => game Over
+            endOfGame('Game Over')
         })
 }
 ///////////////////////////////////////////////////////////
@@ -116,7 +117,7 @@ const startChoosing = function (e) {
             // stop timeBar and time to choose
             clearInterval(timeToChooseId)
 
-            endOfGame('End of Game')
+            endOfGame('Game Over')
         }
     }
 }
@@ -269,7 +270,7 @@ function maxOfNumsInContainer(numSize, containerWidth, containerHeight) {
 ///////////////////////////////////////////////////////////
 //display
 function appendScore(score, adjSibling) {
-    scoreDisplay.innerText = `Your score is: ${score}`
+    scoreDisplay.innerText = `Your score: ${score}`
     scoreDisplay.classList.add('scoreClass')
     adjSibling.insertAdjacentElement('afterend', scoreDisplay);
 }
@@ -313,33 +314,3 @@ function spacesInContainer(numSize, spacesColOrRow, heightOrWidth) {
 }
 ///////////////////////////////////////////////////////////
 
-
-
-
-// br
-
-
-
-
-
-
-
-
-
-// function checkCollision(){
-//     keepLoop = true
-//     while (keepLoop && listOfPositions.length > 1) {
-//         for (let x of listOfPositions) {
-//             if (randLeft === x.posLeft && randTop === x.posTop) {
-//                 shuffle(spacesOnRow)
-//                 shuffle(spacesOnCol)
-//                 randLeft = `${spacesOnRow[i] * numSize}px`
-//                 randTop = `${spacesOnCol[i] * numSize}px`
-//                 keepLoop = true
-//                 break
-//             } else {
-//                 keepLoop = false
-//             }
-//         }
-//     }
-// }
